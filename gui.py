@@ -29,7 +29,26 @@ def display_ascii():
 
     converter = GIFToASCIIConverter(gif_path.get())
     ascii_frames = converter.convert_to_ascii()
-    converter.display_ascii_animation(ascii_frames)
+
+    # Create a new window to display ASCII art
+    ascii_window = tk.Toplevel(root)
+    ascii_window.title("ASCII Art Viewer")
+    ascii_window.geometry("800x600")
+
+    text_widget = tk.Text(ascii_window, wrap="none", font=("Courier", 8))
+    text_widget.pack(expand=True, fill="both")
+
+    def animate(index=0):
+        if index < len(ascii_frames):
+            text_widget.config(state="normal")
+            text_widget.delete("1.0", "end")
+            text_widget.insert("end", ascii_frames[index])
+            text_widget.config(state="disabled")
+            ascii_window.after(100, animate, index + 1)
+        else:
+            ascii_window.after(100, animate, 0)  # Loop back to the first frame
+
+    animate()
 
 # Create the main window
 root = tk.Tk()
