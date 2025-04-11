@@ -17,15 +17,24 @@ class GIFToASCIIConverter:
     def convert_frame_to_ascii(self, frame, width=100):
         frame = frame.convert("L")  # Convert to grayscale
         aspect_ratio = frame.height / frame.width
-        new_height = int(aspect_ratio * width * 0.55)  # Adjust height based on aspect ratio
+        new_height = int(
+            aspect_ratio * width * 0.55
+        )  # Adjust height based on aspect ratio
         frame = frame.resize((width, new_height))
 
         pixels = frame.getdata()
         ASCII_CHARS = "@%#*+=-:. "
         scale_factor = 256 // len(ASCII_CHARS)  # Calculate scale factor for mapping
-        ascii_str = ''.join([ASCII_CHARS[min(pixel // scale_factor, len(ASCII_CHARS) - 1)] for pixel in pixels])  # Map pixels to ASCII
-        ascii_lines = [ascii_str[i:i + width] for i in range(0, len(ascii_str), width)]  # Wrap lines
-        return '\n'.join(ascii_lines)
+        ascii_str = "".join(
+            [
+                ASCII_CHARS[min(pixel // scale_factor, len(ASCII_CHARS) - 1)]
+                for pixel in pixels
+            ]
+        )  # Map pixels to ASCII
+        ascii_lines = [
+            ascii_str[i : i + width] for i in range(0, len(ascii_str), width)
+        ]  # Wrap lines
+        return "\n".join(ascii_lines)
 
     def convert_to_ascii(self):
         ascii_frames = []
@@ -37,7 +46,8 @@ class GIFToASCIIConverter:
     def display_ascii_animation(self, ascii_frames, delay=0.1):
         import os
         import time
+
         for frame in ascii_frames:
-            os.system('cls' if os.name == 'nt' else 'clear')
+            os.system("cls" if os.name == "nt" else "clear")
             print(frame)
             time.sleep(delay)
